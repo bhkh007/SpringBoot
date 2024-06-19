@@ -18,6 +18,8 @@ import com.example.demo.service.ProductService;
 /*@Controller	
 @ResponseBody*/
 
+
+@CrossOrigin
 @RestController
 @RequestMapping("/product")
 public class ProductController {
@@ -97,4 +99,20 @@ public class ProductController {
 			return new ResponseEntity<>(data,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	@GetMapping("/byName/{name}")
+	public ResponseEntity<?> findByName(@PathVariable String name){
+		HashMap< Object, Object> data = new HashMap<>();
+		try {
+			
+			List<Product> productList = productService.findByName(name);
+			return new ResponseEntity<>(productList,HttpStatus.OK);
+			
+		} catch (Exception e) {
+			data.put(ResponseKey.MESSAGE,ResponseMessage.SOMETHING_WENT_WRONG);
+			return new ResponseEntity<>(data,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+	}
+	
 }
