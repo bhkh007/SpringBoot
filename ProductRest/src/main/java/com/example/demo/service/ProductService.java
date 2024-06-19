@@ -33,4 +33,8 @@ public class ProductService {
 	public void remove(int id) {
 		productRepository.deleteById(id);
 	}
+	
+	public long countAll() {
+		return productRepository.count();
+	}
 }
