@@ -1,6 +1,8 @@
 package com.example.demo.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,13 +19,14 @@ public class Review {
 	private String reviewGivenBy;
 	private String content;
 	
+	@JsonIgnore
 	@ManyToOne
 	private Product product;
 	
 	public Product getProduct() {
 		return product;
 	}
-	
+	 
 	public void setProduct(Product product) {
 		this.product = product;
 	}

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import com.example.demo.constants.ResponseKey;
 import com.example.demo.constants.ResponseMessage;
 import com.example.demo.model.Product;
+import com.example.demo.model.Review;
 import com.example.demo.service.ProductService;
 
 
@@ -113,6 +114,27 @@ public class ProductController {
 			return new ResponseEntity<>(data,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
+	}
+	
+	@GetMapping("/{id}/reviews")
+	public ResponseEntity<?> findAllReviewsByProduct(@PathVariable int id){
+		HashMap< Object, Object> data = new HashMap<>();
+		try {
+			Optional<Product> productOptional = productService.getbyId(id);
+			if(productOptional.isPresent()) {
+				Product product = productOptional.get();
+				List<Review> reviews = product.getReviews();
+				return new ResponseEntity<>(reviews ,HttpStatus.OK);
+			}
+			else {
+				data.put(ResponseKey.MESSAGE, ResponseMessage.NO_PRODUCT_FOUND_BY_ID);
+				return new ResponseEntity<>(data,HttpStatus.OK);
+			}
+			
+		} catch (Exception e) {
+			data.put(ResponseKey.MESSAGE,ResponseMessage.SOMETHING_WENT_WRONG);
+			return new ResponseEntity<>(data,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 }
