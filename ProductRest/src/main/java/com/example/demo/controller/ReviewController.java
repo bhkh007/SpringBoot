@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.constants.ResponseKey;
+import com.app.studentapi.constants.ResponseKey;
 import com.example.demo.constants.ResponseMessage;
 import com.example.demo.model.Product;
 import com.example.demo.model.Review;

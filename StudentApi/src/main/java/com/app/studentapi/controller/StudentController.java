@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+package com.app.studentapi.controller;
 
 import java.util.HashMap;
 import java.util.List;
@@ -9,29 +9,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.app.studentapi.constants.ResponseKey;
-import com.example.demo.constants.ResponseMessage;
+import com.app.studentapi.model.Student;
+import com.app.studentapi.service.StudentService;
 import com.example.demo.model.Product;
 import com.example.demo.model.Review;
-import com.example.demo.service.ProductService;
-
-
-/*@Controller	
-@ResponseBody*/
-
 
 @CrossOrigin
 @RestController
-@RequestMapping("/product")
-public class ProductController {
+@RequestMapping("/students")
+public class StudentController {
 
 	@Autowired
-	private ProductService productService;
+	private StudentService studentService;
 	
 	@Autowired
 	private MessageSource messageSource;
+	
 	
 	@GetMapping("/greet/{name}")
 	public ResponseEntity<?> greet(@PathVariable("name") String name, @RequestHeader(name="Accept-Lanuage",required=false)Locale locale){
@@ -45,14 +49,14 @@ public class ProductController {
 	@GetMapping("/")
 	public ResponseEntity<?> findAll(@RequestHeader(name="Accept-Lanuage",required=false)Locale locale) {
 		try {
-			List<Product> productsList = productService.findAll();
+			List<Student> productsList = studentService.findAll();
 			if(productsList.isEmpty()) {
 				HashMap< String, String> data = new HashMap<>();
 				data.put(ResponseKey.MESSAGE, messageSource.getMessage("error.noproductavailable", null,locale));
 				return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
 			}else {
 				HashMap<String, Object> data = new HashMap<>();
-				data.put(ResponseKey.COUNT, productService.countAll());
+				data.put(ResponseKey.COUNT, studentService.countAll());
 				data.put(ResponseKey.PRODUCTS, productsList);
 				return new ResponseEntity<>(data, HttpStatus.OK);
 			}
@@ -68,7 +72,7 @@ public class ProductController {
 	public ResponseEntity<?> getById(@PathVariable int id,@RequestHeader(name="Accept-Lanuage",required=false)Locale locale){
 		HashMap< Object, Object> data = new HashMap<>();
 		try {
-			Optional<Product> productOptional = productService.getbyId(id);
+			Optional<Product> productOptional = studentService.getbyId(id);
 			if(productOptional.isPresent()) {
 				Product product = productOptional.get();
 				return new ResponseEntity<>(product,HttpStatus.OK);
@@ -86,7 +90,7 @@ public class ProductController {
 	@PostMapping("/")
 	public ResponseEntity<?> save(@RequestBody Product product,@RequestHeader(name="Accept-Lanuage",required=false)Locale locale) {
 		try {
-			Product savedProduct = productService.save(product);
+			Product savedProduct = studentService.save(product);
 			return new ResponseEntity<>(savedProduct,HttpStatus.CREATED);
 		} catch (Exception e) {
 			HashMap< String, String> data = new HashMap<>();
@@ -100,9 +104,9 @@ public class ProductController {
 	public ResponseEntity<?> remove(@PathVariable int id,@RequestHeader(name="Accept-Lanuage",required=false)Locale locale){
 		HashMap< Object, Object> data = new HashMap<>();
 		try {
-			Optional<Product> productOptional = productService.getbyId(id);
+			Optional<Product> productOptional = studentService.getbyId(id);
 			if(productOptional.isPresent()) {
-				productService.remove(id);
+				studentService.remove(id);
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
 			else {
@@ -120,7 +124,7 @@ public class ProductController {
 		HashMap< Object, Object> data = new HashMap<>();
 		try {
 			
-			List<Product> productList = productService.findByName(name);
+			List<Product> productList = studentService.findByName(name);
 			return new ResponseEntity<>(productList,HttpStatus.OK);
 			
 		} catch (Exception e) {
@@ -134,7 +138,7 @@ public class ProductController {
 	public ResponseEntity<?> findAllReviewsByProduct(@PathVariable int id,@RequestHeader(name="Accept-Lanuage",required=false)Locale locale){
 		HashMap< Object, Object> data = new HashMap<>();
 		try {
-			Optional<Product> productOptional = productService.getbyId(id);
+			Optional<Product> productOptional = studentService.getbyId(id);
 			if(productOptional.isPresent()) {
 				Product product = productOptional.get();
 				List<Review> reviews = product.getReviews();
@@ -150,5 +154,4 @@ public class ProductController {
 			return new ResponseEntity<>(data,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
 }
