@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.app.studentapi.constants.ResponseKey;
+import com.example.demo.constants.ResponseKey;
 import com.example.demo.constants.ResponseMessage;
 import com.example.demo.model.Product;
 import com.example.demo.model.Review;
